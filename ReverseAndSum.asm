@@ -8,10 +8,6 @@ TITLE Subtract, Version 2         (ReverseAndSum.asm)
 
 INCLUDE Irvine32.inc
 
-.386
-.model flat,stdcall
-.stack 4096
-    ExitProcess PROTO,dwExitCode:DWORD
 
 .data
 
@@ -21,10 +17,17 @@ INCLUDE Irvine32.inc
 
 .code
 	main PROC
+		mov  ebx, 0							; ebx = 0
 		mov  edx,OFFSET prompt
-		call WriteString
-		call ReadInt
-		call WriteInt
+		mov  ecx, 10						; loop 10
+	L1:
+		call WriteString					; prompt
+		call ReadInt						; enter a interger
+		push eax
+		add  ebx, eax						; ebx += eax
+		mov  eax, '+'						
+		push eax
+		loop L1
 
 
 		exit

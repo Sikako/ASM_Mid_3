@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.30.30706.0	    03/16/22 11:51:24
+Microsoft (R) Macro Assembler Version 14.30.30706.0	    03/16/22 13:03:22
 /Subtract, Version 2         (ReverseAndSum.asm		     Page 1 - 1
 
 
@@ -29,11 +29,6 @@ Microsoft (R) Macro Assembler Version 14.30.30706.0	    03/16/22 11:51:24
 			      C .LIST
 			      C 
 
-				.386
-				.model flat,stdcall
-ReverseAndSum.asm(12) : warning A4011:multiple .MODEL directives found : .MODEL ignored
-				.stack 4096
-				    ExitProcess PROTO,dwExitCode:DWORD
 
  00000000			.data
 
@@ -41,22 +36,30 @@ ReverseAndSum.asm(12) : warning A4011:multiple .MODEL directives found : .MODEL 
 	   20 61 20 69 6E
 	   74 65 72 67 65
 	   72 3A 20 00
+ 00000013 00				Sum BYTE 0
 
 
  00000000			.code
  00000000				main PROC
- 00000000  BA 00000000 R			mov  edx,OFFSET prompt
- 00000005  E8 00000000 E			call WriteString
- 0000000A  E8 00000000 E			call ReadInt
- 0000000F  E8 00000000 E			call WriteInt
+ 00000000  BB 00000000				mov  ebx, 0							; ebx = 0
+ 00000005  BA 00000000 R			mov  edx,OFFSET prompt
+ 0000000A  B9 0000000A				mov  ecx, 10						; loop 10
+ 0000000F				L1:
+ 0000000F  E8 00000000 E			call WriteString					; prompt
+ 00000014  E8 00000000 E			call ReadInt						; enter a interger
+ 00000019  50					push eax
+ 0000001A  03 D8				add  ebx, eax						; ebx += eax
+ 0000001C  B8 0000002B				mov  eax, '+'						
+ 00000021  50					push eax
+ 00000022  E2 EB				loop L1
 
 
 						exit
- 00000014  6A 00	   *	    push   +000000000h
- 00000016  E8 00000000 E   *	    call   ExitProcess
- 0000001B				main ENDP
+ 00000024  6A 00	   *	    push   +000000000h
+ 00000026  E8 00000000 E   *	    call   ExitProcess
+ 0000002B				main ENDP
 					END main
-Microsoft (R) Macro Assembler Version 14.30.30706.0	    03/16/22 11:51:24
+Microsoft (R) Macro Assembler Version 14.30.30706.0	    03/16/22 13:03:22
 /Subtract, Version 2         (ReverseAndSum.asm		     Symbols 2 - 1
 
 
@@ -150,8 +153,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 00000013 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 0000001B Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000014 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 0000002B Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -258,7 +261,8 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000001B Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000002B Public STDCALL
+  L1 . . . . . . . . . . . . . .	L Near	 0000000F _TEXT	
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
@@ -393,6 +397,7 @@ STD_ERROR_HANDLE . . . . . . . .	Number	 -0000000Ch
 STD_INPUT_HANDLE . . . . . . . .	Number	 -0000000Ah   
 STD_OUTPUT_HANDLE  . . . . . . .	Number	 -0000000Bh   
 SetConsoleTitle  . . . . . . . .	Text   	 SetConsoleTitleA
+Sum  . . . . . . . . . . . . . .	Byte	 00000013 _DATA	
 TAB  . . . . . . . . . . . . . .	Number	 00000009h   
 TRUE . . . . . . . . . . . . . .	Number	 00000001h   
 TRUNCATE_EXISTING  . . . . . . .	Number	 00000005h   
@@ -497,5 +502,5 @@ white  . . . . . . . . . . . . .	Number	 0000000Fh
 wsprintf . . . . . . . . . . . .	Text   	 wsprintfA
 yellow . . . . . . . . . . . . .	Number	 0000000Eh   
 
-	   1 Warnings
+	   0 Warnings
 	   0 Errors
