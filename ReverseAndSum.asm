@@ -12,7 +12,7 @@ INCLUDE Irvine32.inc
 .data
 
 	prompt  BYTE "Enter a interger: ",0
-	Sum BYTE 0
+	Sum BYTE "Sum : ",0
 
 
 .code
@@ -25,10 +25,18 @@ INCLUDE Irvine32.inc
 		call ReadInt						; enter a interger
 		push eax
 		add  ebx, eax						; ebx += eax
-		mov  eax, '+'						
-		push eax
 		loop L1
 
+		mov ecx, 10
+	L2:
+		pop eax
+		call WriteInt
+		loop L2
+
+		mov eax, ebx
+		mov edx, OFFSET Sum
+		call WriteString
+		call WriteInt
 
 		exit
 	main ENDP

@@ -1,4 +1,4 @@
-Microsoft (R) Macro Assembler Version 14.30.30706.0	    03/16/22 13:03:22
+Microsoft (R) Macro Assembler Version 14.30.30706.0	    03/16/22 14:56:22
 /Subtract, Version 2         (ReverseAndSum.asm		     Page 1 - 1
 
 
@@ -36,7 +36,8 @@ Microsoft (R) Macro Assembler Version 14.30.30706.0	    03/16/22 13:03:22
 	   20 61 20 69 6E
 	   74 65 72 67 65
 	   72 3A 20 00
- 00000013 00				Sum BYTE 0
+ 00000013 53 75 6D 20 3A		Sum BYTE "Sum : ",0
+	   20 00
 
 
  00000000			.code
@@ -49,17 +50,25 @@ Microsoft (R) Macro Assembler Version 14.30.30706.0	    03/16/22 13:03:22
  00000014  E8 00000000 E			call ReadInt						; enter a interger
  00000019  50					push eax
  0000001A  03 D8				add  ebx, eax						; ebx += eax
- 0000001C  B8 0000002B				mov  eax, '+'						
- 00000021  50					push eax
- 00000022  E2 EB				loop L1
+ 0000001C  E2 F1				loop L1
 
+ 0000001E  B9 0000000A				mov ecx, 10
+ 00000023				L2:
+ 00000023  58					pop eax
+ 00000024  E8 00000000 E			call WriteInt
+ 00000029  E2 F8				loop L2
+
+ 0000002B  8B C3				mov eax, ebx
+ 0000002D  BA 00000013 R			mov edx, OFFSET Sum
+ 00000032  E8 00000000 E			call WriteString
+ 00000037  E8 00000000 E			call WriteInt
 
 						exit
- 00000024  6A 00	   *	    push   +000000000h
- 00000026  E8 00000000 E   *	    call   ExitProcess
- 0000002B				main ENDP
+ 0000003C  6A 00	   *	    push   +000000000h
+ 0000003E  E8 00000000 E   *	    call   ExitProcess
+ 00000043				main ENDP
 					END main
-Microsoft (R) Macro Assembler Version 14.30.30706.0	    03/16/22 13:03:22
+Microsoft (R) Macro Assembler Version 14.30.30706.0	    03/16/22 14:56:22
 /Subtract, Version 2         (ReverseAndSum.asm		     Symbols 2 - 1
 
 
@@ -153,8 +162,8 @@ Segments and Groups:
 
 FLAT . . . . . . . . . . . . . .	GROUP
 STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
-_DATA  . . . . . . . . . . . . .	32 Bit	 00000014 Para	  Public  'DATA'	
-_TEXT  . . . . . . . . . . . . .	32 Bit	 0000002B Para	  Public  'CODE'	
+_DATA  . . . . . . . . . . . . .	32 Bit	 0000001A Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000043 Para	  Public  'CODE'	
 
 
 Procedures, parameters, and locals:
@@ -261,8 +270,9 @@ WriteStackFrame  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External
 WriteString  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteToFile  . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
 WriteWindowsMsg  . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External STDCALL
-main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 0000002B Public STDCALL
+main . . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000043 Public STDCALL
   L1 . . . . . . . . . . . . . .	L Near	 0000000F _TEXT	
+  L2 . . . . . . . . . . . . . .	L Near	 00000023 _TEXT	
 printf . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 scanf  . . . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
 wsprintfA  . . . . . . . . . . .	P Near	 00000000 FLAT	Length= 00000000 External C
